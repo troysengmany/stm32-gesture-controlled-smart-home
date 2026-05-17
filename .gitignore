@@ -1,0 +1,38 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.egg-info/
+
+# IDEs
+.vscode/
+.idea/
+
+# STM32 / embedded build outputs
+Debug/
+Release/
+build/
+*.elf
+*.hex
+*.bin
+*.map
+*.list
+*.su
+*.o
+*.d
+*.log
+
+# Local video captures
+*.mov
+*.mp4
+*.avi
+*.heic
