@@ -1,12 +1,14 @@
 # STM32 Gesture-Controlled Smart Home
 
-A computer-vision-to-embedded control system that uses **OpenCV + MediaPipe hand tracking** on a laptop and **UART** to control an **STM32 Nucleo-F303K8** smart-home prototype with three dimmable LEDs, an OLED menu, a fan output, and a servo-driven door.
+A computer-vision-to-embedded control system that uses **OpenCV + MediaPipe hand tracking** on a laptop and **UART** to control an **STM32 Nucleo-F303K8** smart-home prototype with three dimmable LEDs, an OLED menu, fan control, and a servo-driven door.
+
+**Tech Stack:** STM32 HAL • C • Python • OpenCV • MediaPipe • UART • I2C • PWM • Timers
 
 ![Smart home demo preview](media/preview.gif)
 
 **[Watch the full hardware demo](media/smart-home-demo.mp4)**
 
-## What the project demonstrates
+## What This Project Demonstrates
 
 - Real-time webcam hand tracking with OpenCV and MediaPipe
 - Gesture-to-command mapping in Python
@@ -16,8 +18,17 @@ A computer-vision-to-embedded control system that uses **OpenCV + MediaPipe hand
 - Servo position control for a model smart door
 - SSD1306 OLED menu feedback over I2C
 - STM32 HAL timers, GPIO, UART, I2C, and PWM
+- End-to-end integration of computer vision, embedded firmware, and physical hardware
 
-## System architecture
+## Project Context and Contribution
+
+This project was developed as a 3-person embedded-systems team project. I formed the team and served as the project lead, helping define the project concept, divide responsibilities, and coordinate integration between the different subsystems.
+
+My technical contributions included implementing the Python-to-STM32 UART communication path, integrating gesture commands with the embedded control system, and helping bring the LED, fan, servo, and OLED subsystems together into the final working prototype.
+
+I also worked through software and hardware integration issues involving serial communication, gesture behavior, wiring, and subsystem interaction to improve reliability during the final demonstration.
+
+## System Architecture
 
 ```text
 Webcam
@@ -37,9 +48,9 @@ STM32 Nucleo-F303K8
   `---- I2C1 -----------> SSD1306 OLED
 ```
 
-## Gesture interface
+## Gesture Interface
 
-### Main menu
+### Main Menu
 
 | Gesture | Action |
 |---|---|
@@ -67,7 +78,7 @@ The Python controller uses hand gestures to lock/unlock fan adjustment, turn the
 | 2 fingers | Open door |
 | Hold 4 fingers | Return to menu |
 
-## Repository layout
+## Repository Layout
 
 ```text
 .
@@ -87,7 +98,7 @@ The Python controller uses hand gestures to lock/unlock fan adjustment, turn the
     └── smart-home-demo.mp4
 ```
 
-## Run the Python controller
+## Run the Python Controller
 
 ```bash
 python3 -m venv .venv
@@ -98,17 +109,17 @@ python src/python/gesture_control.py
 
 The script automatically searches for an STM32/ST-Link style serial device and opens it at **38,400 baud**. Camera permission is required.
 
-## STM32 source note
+## STM32 Source Note
 
 `src/stm32/main.c` is the recovered **project-specific application source** from the working prototype. It shows the UART parser, OLED screen logic, PWM LED control, servo logic, fan control, and peripheral initialization used in the demo.
 
 This portfolio repository does **not** duplicate the full STM32CubeIDE-generated project or the third-party SSD1306 driver files (`ssd1306.*`, `fonts.*`). To rebuild from this source, create the matching STM32Cube project/configuration and provide those OLED driver files.
 
-## Hardware mapping
+## Hardware Mapping
 
 See [`hardware/wiring.md`](hardware/wiring.md) for the recovered pin map. The three light outputs are PB4/TIM3_CH1, PB5/TIM3_CH2, and PB3/TIM2_CH2; the servo uses PA8/TIM1_CH1; the fan driver uses PA7; and the OLED uses PB6/PB7 on I2C1.
 
-## UART protocol
+## UART Protocol
 
 See [`docs/uart-protocol.md`](docs/uart-protocol.md) for the command table. Commands include `L1:500`, `FAN:700`, `DOOR:0`, menu navigation commands, and active-light selection.
 
@@ -118,9 +129,8 @@ See [`docs/uart-protocol.md`](docs/uart-protocol.md) for the command table. Comm
 - The system currently requires a laptop running the Python/OpenCV controller and a wired UART connection to the STM32.
 - Gesture behavior uses fixed thresholds and cooldown values, so some tuning may be required for different users or environments.
 - Fan speed is controlled using software PWM rather than a dedicated hardware timer.
-- This repository contains the recovered project-specific STM32 application source rather than the complete STM32CubeIDE project and third-party OLED driver files.
 
-## Future improvements
+## Future Improvements
 
 - Move fan control to a hardware PWM timer for more precise and efficient speed control.
 - Add smoothing and filtering to gesture measurements to reduce brief detection fluctuations.
@@ -129,7 +139,7 @@ See [`docs/uart-protocol.md`](docs/uart-protocol.md) for the command table. Comm
 - Add sensor feedback and automatic control modes in addition to gesture-based control.
 - Package the system into a more compact standalone prototype with cleaner wiring and enclosure design.
 
-## Engineering takeaways
+## Engineering Takeaways
 
 This project tied together computer vision and embedded control in a single end-to-end system. The main integration challenges were making gesture input stable enough for hardware control, keeping the Python and firmware command formats synchronized, tuning real-time thresholds and cooldowns, and coordinating multiple physical outputs while maintaining OLED feedback.
 
