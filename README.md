@@ -112,6 +112,25 @@ See [`hardware/wiring.md`](hardware/wiring.md) for the recovered pin map. The th
 
 See [`docs/uart-protocol.md`](docs/uart-protocol.md) for the command table. Commands include `L1:500`, `FAN:700`, `DOOR:0`, menu navigation commands, and active-light selection.
 
+## Limitations
+
+- Gesture recognition depends on camera position, lighting, and clear visibility of the user's hands.
+- The system currently requires a laptop running the Python/OpenCV controller and a wired UART connection to the STM32.
+- Gesture behavior uses fixed thresholds and cooldown values, so some tuning may be required for different users or environments.
+- Fan speed is controlled using software PWM rather than a dedicated hardware timer.
+- This repository contains the recovered project-specific STM32 application source rather than the complete STM32CubeIDE project and third-party OLED driver files.
+
+## Future improvements
+
+- Move fan control to a hardware PWM timer for more precise and efficient speed control.
+- Add smoothing and filtering to gesture measurements to reduce brief detection fluctuations.
+- Add automatic calibration for gesture and pinch-distance thresholds.
+- Replace the wired UART connection with Bluetooth or Wi-Fi communication.
+- Add sensor feedback and automatic control modes in addition to gesture-based control.
+- Package the system into a more compact standalone prototype with cleaner wiring and enclosure design.
+
 ## Engineering takeaways
 
-This project tied together computer vision and embedded control in a single end-to-end loop. The main integration challenges were making gesture input stable enough for hardware control, keeping the Python and firmware command formats synchronized, tuning real-time thresholds/cooldowns, and coordinating multiple physical outputs while maintaining OLED feedback.
+This project tied together computer vision and embedded control in a single end-to-end system. The main integration challenges were making gesture input stable enough for hardware control, keeping the Python and firmware command formats synchronized, tuning real-time thresholds and cooldowns, and coordinating multiple physical outputs while maintaining OLED feedback.
+
+The project also reinforced the importance of designing clear communication protocols between software and hardware, debugging each subsystem independently before system integration, and accounting for timing and input variability in real-time embedded systems.
